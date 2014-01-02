@@ -286,12 +286,9 @@ if (Meteor.isClient) { // Client side code
 
     Template.post.helpers({
         colors: function () {
-            var loc = window.location.pathname.replace('/p/', '');
-            if(Posts) {
-                if (Posts.findOne({ _id: loc }).location != 'undefined')
-                    return Posts.findOne({ _id: loc }).location.split('#').slice(1,5);
-                return '';
-            }
+        var loc = window.location.pathname.replace('/p/', '');
+            if (Posts.findOne({ _id: loc }).location != 'undefined')
+                return Posts.findOne({ _id: loc }).location.split('#').slice(1,5);
             return '';
         }
     });
