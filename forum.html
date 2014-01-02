@@ -1,0 +1,383 @@
+<template name="layout">
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand"><i class="fa fa-chevron-left"></i>Rally<i class="fa fa-chevron-right"></i></a>
+			</div>
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="{{home}}"><a href="/">Home</a></li>
+					<li class="{{friends}}"><a href="#friends">Friends</a></li>
+					<li class="{{random}}"><a href="/p/random">Random</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					{{loginButtons}}
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			{{yield}}
+		</div>
+		<span class="visible-xs">Extra Small</span>
+		<span class="visible-sm">Small</span>
+		<span class="visible-md">Medium</span>
+		<span class="visible-lg">Large</span>
+	</div>
+</template>
+
+<template name="home">
+	{{> sidebar}}
+	<div class="col-sm-9 col-xs-12">
+		{{> controls}}
+	</div>
+</template>
+
+<template name="make">
+	{{> sidebar}}
+	<div class="col-sm-9 col-xs-12">
+	{{#if user}}
+		{{> maker}}
+	{{else}}
+		{{> redirect}}
+	{{/if}}
+	</div>
+</template>
+
+<template name="posts">
+	{{> sidebar}}
+	<div class="col-sm-9 col-xs-12">
+		{{> post}}
+	</div>
+</template>
+
+<template name="disp-topics">
+	{{> sidebar}}
+	<div class="col-sm-9 col-xs-12">
+		{{> topic}}
+	</div>
+</template>
+
+<template name="sidebar">
+	<div class="col-sm-3 hidden-xs">
+		<div data-spy="affix" data-offset-top="20">
+			<div class="well">
+				{{#if user}}
+				<img class="img-rounded" src="{{gravatar}}" alt="{{username}}" width="100%">
+				<div class="center-block">Welcome back, {{username}}</div>
+				<button class="btn btn-primary btn-block">Settings</button>
+				<button class="btn btn-primary btn-block">My Posts</button>
+				<button class="btn btn-primary btn-block">My Topics</button>
+				<small><a href="https://secure.gravatar.com/">Gravatar?</a></small>
+				{{else}}
+				<div class="center-block">Please Sign in</div>
+				{{/if}}
+			</div>
+		</div>
+	</div>
+</template>
+
+<template name="controls">
+	{{#if user}}
+	<div class="form-inline row">
+		<div class="form-group col-sm-4 col-xs-6">
+			<button id="newtopic" class="btn btn-primary col-xs-12">New Topic</button>
+		</div>
+		<div class="form-group col-sm-4 col-xs-6">
+			<a href="/make" class="btn btn-primary col-xs-12">New Post</a>
+		</div>
+		<div class="form-group col-sm-4 col-xs-12 hidden-sm">
+			<div class="input-group">
+				<input class="form-control col-xs-3" type="text" placeholder="Search Topics and Posts">
+				<span class="input-group-btn">
+					<button class="btn btn-primary">
+						<span class="glyphicon glyphicon-search"></span>
+					</button>
+				</span>
+			</div>
+		</div>
+		<div class="col-sm-4 visible-sm">
+			<div class="input-group">
+				<input type="text" class="form-control" placeholder="Search">
+				<span class="input-group-btn">
+					<button class="btn btn-primary">
+						<span class="glyphicon glyphicon-search"></span>
+					</button>
+				</span>
+			</div>
+		</div>
+		<div id="new" class="form-group" style="display: none;">
+			<div class="col-xs-12">
+				<div class="input-group col-xs-12">
+					<input name="newtopic" type="text" class="form-control" placeholder="Give it a name!">
+					<span class="input-group-btn">
+						<button id="make" class="btn btn-primary">MAKE</button>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	{{/if}}
+	<div id="content">
+		<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+			<li class="active"><a href="#topics">Topics</a></li>
+			<li><a href="#latest">Latest</a></li>
+			{{#if user}}
+			<li><a href="#mine">My Posts</a></li>
+			<li><a href="#replies">Replies <span class="label label-default">0</span></a></li>
+			{{/if}}
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane fade in active" id="topics">
+				{{> topics}}
+			</div>
+			<div class="tab-pane fade" id="latest">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Title</th>
+							<th>Poster</th>
+							<th>Location</th>
+						</tr>
+					</thead>
+					<tbody>
+					{{#each latest}}
+						<tr href="/p/{{_id}}">
+							<td>{{rank}}</td>
+							<td>{{title}}</td>
+							<td>{{poster}}</td>
+							<td>
+							{{#if location}}
+								<span class="label label-success"> <i class="fa fa-location-arrow"></i> enabled! </span>
+							{{else}}
+								<span class="label label-danger">anonymous</span>
+							{{/if}}
+							</td>
+						</tr>
+					{{/each}}
+					</tbody>
+				</table>
+			</div>
+			{{#if user}}
+			<div class="tab-pane fade" id="mine">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Title</th>
+							<th>Poster</th>
+							<th>Location</th>
+						</tr>
+					</thead>
+					<tbody>
+					{{#each mine}}
+						<tr href="/p/{{_id}}">
+							<td>{{rank}}</td>
+							<td>{{title}}</td>
+							<td>{{poster}}</td>
+							<td>
+							{{#if location}}
+								<span class="label label-success"> <i class="fa fa-location-arrow"></i> enabled! </span>
+							{{else}}
+								<span class="label label-danger">anonymous</span>
+							{{/if}}
+							</td>
+						</tr>
+					{{/each}}
+					</tbody>
+				</table>
+			</div>
+			{{/if}}
+		</div>
+	</div>
+</template>
+
+<template name="topics">
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>Status</th>
+				<th>Topic</th>
+				<th>Number of posts</th>
+				<th><i class="fa fa-user" data-toggle="tooltip" title="displays the user's non-unique color" data-placement="auto"></i></th>
+			</tr>
+		</thead>
+		<tbody>
+		{{#each topic}}
+			<tr href="/{{name}}">
+				<td id="status">{{{admin}}}</td>
+				<td id="name">{{name}}</td>
+				<td>{{posts}}</td>
+				<td><i style="color: {{creator}}" class="fa fa-user"></i></td>
+			</tr>
+		{{/each}}
+		</tbody>
+	</table>
+</template>
+
+<template name="maker">
+	<div class="row">
+		<div class="form-group col-sm-4 col-xs-6">
+			<input name="title" type="text" class="form-control col-xs-12" placeholder="Title" autofocus>
+		</div>
+		<div class="form-group col-sm-4 col-xs-12">
+			<select class="selectpicker col-xs-12">
+			<option value="TOPIC">Select a Topic</option>
+			{{#each topic}}
+				<option value="{{name}}">{{name}}</option>
+			{{/each}}
+			</select>
+		</div>
+		<div class="form-group col-sm-4 col-xs-6">
+			<button id="location" class="btn btn-primary col-xs-12" data-toggle="tooltip" title="We'll take your geohash and turn it into four colors that represent your location" data-placement="bottom"><i class="fa fa-location-arrow"></i> Tag geo chroma</button>
+		</div>
+		<div class="form-group col-xs-12">
+			<textarea id="content" rows="10" class="form-control" placeholder="You can use markdown!"></textarea>
+		</div>
+		<div class="col-xs-12">
+			<p>Preview:</p>
+			<span class="label label-primary">Submitted by {{username}}</span>
+			<div id="preview" class="well col-xs-12">
+				<p><b>Start typing to see a preview of your post<b></p>
+			</div>
+		</div>
+		<div class="form-group col-xs-12">
+			<input type="hidden" id="location" value="none">
+			<button id="post" class="btn btn-primary col-xs-12">Post</button>
+		</div>
+	</div>
+</template>
+
+<template name="topic">
+	<div class="row">
+		<div class="col-sm-4 col-xs-12">
+			<ol class="breadcrumb col-xs-12">
+				<li><a href="/">Home</a></li>
+				<li><a href="/{{topic.name}}">{{topic.name}}</a></li>
+			</ol>
+		</div>
+		<div class="form-group col-sm-4 col-xs-6">
+				<a href="/make" class="btn btn-primary col-xs-12">New Post</a>
+			</div>
+			<div class="form-group col-sm-4 col-xs-12 hidden-sm">
+				<div class="input-group">
+					<input class="form-control col-xs-3" type="text" placeholder="Search Topics and Posts">
+					<span class="input-group-btn">
+						<button class="btn btn-primary">
+							<span class="glyphicon glyphicon-search"></span>
+						</button>
+					</span>
+				</div>
+			</div>
+			<div class="col-sm-4 visible-sm">
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="Search">
+					<span class="input-group-btn">
+						<button class="btn btn-primary">
+							<span class="glyphicon glyphicon-search"></span>
+						</button>
+					</span>
+				</div>
+			</div>
+			<div id="new" class="form-group" style="display: none;">
+				<div class="col-xs-12">
+					<div class="input-group col-xs-12">
+						<input name="newtopic" type="text" class="form-control" placeholder="Give it a name!">
+						<span class="input-group-btn">
+							<button id="make" class="btn btn-primary">MAKE</button>
+						</span>
+					</div>
+				</div>
+			</div>
+	</div>
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Title</th>
+				<th>Poster</th>
+				<th>Location</th>
+			</tr>
+		</thead>
+		<tbody>
+		{{#each posts}}
+			<tr href="/p/{{_id}}">
+				<td>{{rank}}</td>
+				<td>{{title}}</td>
+				<td>{{poster}}</td>
+				<td>
+				{{#if location}}
+					<span class="label label-success"> <i class="fa fa-location-arrow"></i> enabled! </span>
+				{{else}}
+					<span class="label label-danger">anonymous</span>
+				{{/if}}
+				</td>
+			</tr>
+		{{/each}}
+		</tbody>
+	</table>
+</template>
+
+<template name="post">
+	<ol class="breadcrumb">
+		<li><a href="/">Home</a></li>
+		<li><a href="/{{post.topic}}">{{post.topic}}</a></li>
+		<li><a href="/{{post._id}}">{{post.title}}</a></li>
+	</ol>
+	<div class="label label-primary">Submitted by {{post.poster}} <span id="time">{{post.time}}</span></div>
+	
+	<div id="post" class="well col-xs-12">
+		<p>{{post.post}}</p>
+		<span class="label label-danger">There was a problem displaying the markdown</span>
+	</div>
+	{{#if colors}}
+	<div id="colors_container" class="pull-right">
+		{{#each colors}}
+		<div id="color_segment" style="background: #{{this}};"></div>
+		{{/each}}
+	</div>
+	{{/if}}
+	<div class="row">
+		<div class="col-xs-9">
+			<textarea id="reply-text" class="form-control" placeholder="Reply here, with markdown"></textarea>
+		</div>
+		<div class="col-xs-3">
+			<div class="btn-group btn-block visible-lg visible-md">
+				<button id="like" class="btn btn-sm btn-success col-xs-6"><i class="fa fa-thumbs-up"></i> Like</button>
+				<button id="dislike" class="btn btn-sm btn-danger col-xs-6"><i class="fa fa-thumbs-down"></i> Dislike</button>
+			</div>
+			<div class="btn-group btn-block visible-sm visible-xs">
+				<button id="like" class="btn btn-sm btn-success col-xs-6"><i class="fa fa-thumbs-up"></i></button>
+				<button id="dislike" class="btn btn-sm btn-danger col-xs-6"><i class="fa fa-thumbs-down"></i></button>
+			</div>
+			<button id="location" class="btn btn-sm btn-primary btn-block visible-lg visible-md visible-sm"><i class="fa fa-location-arrow"></i> Tag geo chroma</button>
+			<button id="location" class="btn btn-sm btn-primary btn-block visible-xs"><i class="fa fa-location-arrow"></i></button>
+			<button id="reply" class="btn btn-sm btn-primary btn-block visible-lg visible-md visible-sm"><i class="fa fa-reply"></i> Reply</button>
+			<button id="reply" class="btn btn-sm btn-primary btn-block visible-xs"><i class="fa fa-reply"></i> Reply</button>
+			<input type="hidden" id="location" value="none">
+		</div>
+	</div>
+	{{> replies}}
+</template>
+
+<template name="replies">
+	{{#each reply}}
+	<div class="reply">
+		<div class="label label-primary">From {{this.name}} <span class="time">{{this.time}}</span></div>
+		<div class="well col-xs-12 markdown">
+			<p>{{this.reply}}</p>
+		<span class="label label-danger">There was a problem displaying the markdown</span>
+		</div>
+	</div>
+	{{/each}}
+</template>
+
+<template name="redirect"></template>

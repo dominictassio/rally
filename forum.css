@@ -1,0 +1,72 @@
+/* Body padding fix for fixed navbar */
+body { padding-top: 70px; }
+
+/* Turns cursor into a pointer when you hover over them */
+tr { cursor: pointer; }
+
+/* fixes navbar colors, makes it red */
+.navbar-inverse,
+.navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus {
+	background-color: #d14836;
+	border-color: #fff;
+}
+
+/* fixes the nav-button border for sm screens */
+.navbar-inverse .navbar-toggle,
+.navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus { border-color: #fff; }
+
+/* fixes the text color of the navbar */
+.navbar-inverse .navbar-brand,
+.navbar-inverse .navbar-nav > li > a { color: #fff; }
+
+/* fixes navbar selected colors makes it white with red text */
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus,
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+	background-color: #fff;
+	color: #d14836;
+}
+/* Fixes the spacing for the btn-blocks and form-groups */
+.center-block + .btn-block:first-of-type { margin-top: 5px; }
+.form-inline .form-group { margin-bottom: 15px; }
+
+/* Location color styling for the location button on the make page */
+#colors { padding: 0; }
+#colors > div {
+	height: 34px;
+	float: left;
+}
+#colors.btn-block > div {
+	height: 30px;
+}
+#colors > div:last-of-type {
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+#colors_container, #colors_container_none {
+	width: 240px;
+	height: 8px;
+	-webkit-transform: translateY(-30px);
+}
+
+/* Location color styling for the bar on the post page */
+#colors_container > #color_segment, #colors_container_none > #color_segment_none {
+	float: left;
+	width: 60px;
+	height: 10px;
+}
+#colors_container > #color_segment:last-of-type { border-bottom-right-radius: 4px; }
+#colors_container > #color_segment:first-of-type { border-top-left-radius: 4px; }
+
+/* Sets the reply box's height to fit the buttons next to it */
+#reply-text {
+	height: 100px;
+	margin-bottom: 30px;
+}
+
+.btn-block {
+	height: 30px;
+}
+
+.btn-group.btn-block {
+	height: 30px;
+}

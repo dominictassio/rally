@@ -1,0 +1,10 @@
+{
+  "packages": {
+    "bootstrap-3": {},
+    "accounts-ui-bootstrap-3": {},
+    "profile": {},
+    "crypto-md5": {},
+    "moment": {},
+    "SyntaxHighlighter": {}
+  }
+}
